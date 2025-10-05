@@ -1,195 +1,103 @@
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import RetroGrid from "@/components/magicui/retro-grid";
-import { AnimatedShinyText } from "@/components/magicui/animated-shiny-text";
-import { ArrowRight, MessageCircle, ThumbsUp, User, Eye } from "lucide-react";
-import Link from "next/link";
+// 👆 After running `npm install lucide-react`, you can paste this code.
 
-// Mock Data: Replace these with your actual data fetching logic from Appwrite
-const questions = [
-  {
-    id: "1",
-    title: "How to vertically center a div?",
-    tags: ["css", "html", "flexbox"],
-    author: "John Doe",
-    authorAvatar: "https://api.dicebear.com/7.x/pixel-art/svg?seed=John",
-    createdAt: "2 hours ago",
-    votes: 15,
-    answers: 3,
-    views: 120,
-  },
-  {
-    id: "2",
-    title: "What is the difference between 'let' and 'const' in JavaScript?",
-    tags: ["javascript", "es6"],
-    author: "Jane Smith",
-    authorAvatar: "https://api.dicebear.com/7.x/pixel-art/svg?seed=Jane",
-    createdAt: "1 day ago",
-    votes: 42,
-    answers: 5,
-    views: 530,
-  },
-  {
-    id: "3",
-    title: "How to fetch data in React with hooks?",
-    tags: ["react", "hooks", "fetch"],
-    author: "CodeMaster",
-    authorAvatar: "https://api.dicebear.com/7.x/pixel-art/svg?seed=Code",
-    createdAt: "3 days ago",
-    votes: 28,
-    answers: 4,
-    views: 890,
-  },
-];
+import { ArrowRight, MessagesSquare, Users, Star } from "lucide-react";
 
-const popularTags = [
-  { name: "javascript", count: 1250 },
-  { name: "react", count: 980 },
-  { name: "python", count: 850 },
-  { name: "nextjs", count: 720 },
-  { name: "css", count: 650 },
-  { name: "typescript", count: 530 },
-];
-// End of Mock Data
-
-const Home = () => {
+export default function Home() {
   return (
-    <div className="w-full">
+    <main className="flex min-h-screen w-full flex-col bg-slate-900 text-white">
+      {/* Header */}
+      <header className="sticky top-0 z-10 border-b border-slate-800 bg-slate-900/50 backdrop-blur-lg">
+        <div className="container mx-auto flex h-16 items-center justify-between px-4">
+          <h1 className="text-2xl font-bold text-white">Askify</h1>
+          <nav className="flex items-center gap-4">
+            <a
+              href="/login"
+              className="text-sm text-slate-300 hover:text-white transition-colors"
+            >
+              Login
+            </a>
+            <a
+              href="/register"
+              className="rounded-md bg-indigo-600 px-4 py-2 text-sm font-semibold hover:bg-indigo-500 transition-colors"
+            >
+              Join the Community
+            </a>
+          </nav>
+        </div>
+      </header>
+
       {/* Hero Section */}
-      <div className="relative flex h-[400px] w-full flex-col items-center justify-center overflow-hidden rounded-lg border bg-background md:shadow-xl">
-        <RetroGrid />
-        <div className="z-10 text-center">
-          <div className="mb-4 flex items-center justify-center">
-            <AnimatedShinyText className="inline-flex items-center justify-center px-4 py-1 transition ease-out hover:text-neutral-600 hover:duration-300 hover:dark:text-neutral-400">
-              <span>✨ Askify - Your Q&A Hub</span>
-              <ArrowRight className="ml-2 h-4 w-4" />
-            </AnimatedShinyText>
-          </div>
-          <h1 className="text-4xl md:text-6xl font-bold text-foreground mb-4">
-            A Community-Driven Q&A Platform
-          </h1>
-          <p className="text-lg text-muted-foreground mb-6">
-            Ask questions, get answers, and share your knowledge with the world.
-          </p>
-          <div className="mx-auto max-w-2xl">
-            <Input
-              type="search"
-              placeholder="Search for questions..."
-              className="w-full p-6"
-            />
-          </div>
+      <section className="container mx-auto flex flex-col items-center justify-center gap-6 px-4 py-24 text-center sm:py-32">
+        <div className="rounded-full bg-slate-800 px-4 py-1 text-sm text-indigo-400">
+          Your Community for Answers
         </div>
-      </div>
+        <h2 className="text-4xl font-extrabold tracking-tight sm:text-5xl md:text-6xl">
+          Where Curiosity Meets Knowledge
+        </h2>
+        <p className="max-w-2xl text-lg text-slate-400">
+          Stuck on a problem? Askify is the community-driven Q&A platform where
+          you can post your toughest questions and get expert answers from
+          fellow developers, students, and enthusiasts.
+        </p>
+        <a
+          href="/questions/ask"
+          className="group mt-4 inline-flex items-center gap-2 rounded-md bg-indigo-600 px-6 py-3 text-lg font-semibold hover:bg-indigo-500 transition-colors"
+        >
+          Ask a Question
+          <ArrowRight className="h-5 w-5 transition-transform group-hover:translate-x-1" />
+        </a>
+      </section>
 
-      {/* Stats Section */}
-      <div className="my-8 grid grid-cols-1 gap-4 md:grid-cols-3">
-        <div className="flex items-center gap-4 rounded-lg border p-4">
-          <MessageCircle className="h-8 w-8 text-primary" />
-          <div>
-            <p className="text-2xl font-bold">1.2M+</p>
-            <p className="text-muted-foreground">Questions</p>
-          </div>
-        </div>
-        <div className="flex items-center gap-4 rounded-lg border p-4">
-          <ThumbsUp className="h-8 w-8 text-primary" />
-          <div>
-            <p className="text-2xl font-bold">3.4M+</p>
-            <p className="text-muted-foreground">Answers</p>
-          </div>
-        </div>
-        <div className="flex items-center gap-4 rounded-lg border p-4">
-          <User className="h-8 w-8 text-primary" />
-          <div>
-            <p className="text-2xl font-bold">800K+</p>
-            <p className="text-muted-foreground">Users</p>
-          </div>
-        </div>
-      </div>
-
-      {/* Main Content Section */}
-      <div className="flex flex-col gap-8 lg:flex-row">
-        {/* Questions List (Left Side) */}
-        <div className="w-full lg:w-3/4">
-          <div className="flex items-center justify-between mb-4">
-            <h2 className="text-2xl font-bold">Top Questions</h2>
-            <Button asChild>
-              <Link href="/ask-question">Ask a Question</Link>
-            </Button>
-          </div>
-          <div className="space-y-4">
-            {/* IMPORTANT: Here is where you will map over your real questions
-                            fetched from your Appwrite database.
-                        */}
-            {questions.map((q) => (
-              <div key={q.id} className="rounded-lg border p-4">
-                <Link
-                  href={`/questions/${q.id}`}
-                  className="text-xl font-semibold text-primary hover:underline"
-                >
-                  {q.title}
-                </Link>
-                <div className="mt-2 flex flex-wrap gap-2">
-                  {q.tags.map((tag) => (
-                    <span
-                      key={tag}
-                      className="text-xs bg-secondary text-secondary-foreground px-2 py-1 rounded-md"
-                    >
-                      {tag}
-                    </span>
-                  ))}
-                </div>
-                <div className="mt-4 flex items-center justify-between text-sm text-muted-foreground">
-                  <div className="flex items-center gap-2">
-                    <img
-                      src={q.authorAvatar}
-                      alt={q.author}
-                      className="h-6 w-6 rounded-full"
-                    />
-                    <span>{q.author}</span>
-                    <span>&bull; asked {q.createdAt}</span>
-                  </div>
-                  <div className="flex items-center gap-4">
-                    <span className="flex items-center gap-1">
-                      <ThumbsUp className="h-4 w-4" /> {q.votes}
-                    </span>
-                    <span className="flex items-center gap-1">
-                      <MessageCircle className="h-4 w-4" /> {q.answers}
-                    </span>
-                    <span className="flex items-center gap-1">
-                      <Eye className="h-4 w-4" /> {q.views}
-                    </span>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* Sidebar (Right Side) */}
-        <div className="w-full lg:w-1/4">
-          <div className="sticky top-24">
-            <div className="rounded-lg border p-4">
-              <h3 className="text-lg font-bold mb-4">Popular Tags</h3>
-              <div className="flex flex-wrap gap-2">
-                {/* IMPORTANT: Here is where you will map over your real tags
-                                    fetched from your Appwrite database.
-                                */}
-                {popularTags.map((tag) => (
-                  <div
-                    key={tag.name}
-                    className="text-sm bg-secondary text-secondary-foreground px-3 py-1 rounded-full cursor-pointer hover:bg-primary hover:text-primary-foreground"
-                  >
-                    {tag.name}{" "}
-                    <span className="ml-1 text-xs opacity-70">{tag.count}</span>
-                  </div>
-                ))}
-              </div>
+      {/* Features Section */}
+      <section className="container mx-auto px-4 py-16">
+        <h3 className="mb-12 text-center text-3xl font-bold">How It Works</h3>
+        <div className="grid grid-cols-1 gap-8 md:grid-cols-3">
+          {/* Feature 1 */}
+          <div className="rounded-xl border border-slate-800 bg-slate-800/50 p-6">
+            <div className="mb-4 inline-block rounded-lg bg-indigo-500 p-3">
+              <MessagesSquare className="h-6 w-6" />
             </div>
+            <h4 className="mb-2 text-xl font-semibold">Ask Anything</h4>
+            <p className="text-slate-400">
+              Post your questions on any topic. Provide details, code snippets,
+              and context to get the best possible answers.
+            </p>
+          </div>
+          {/* Feature 2 */}
+          <div className="rounded-xl border border-slate-800 bg-slate-800/50 p-6">
+            <div className="mb-4 inline-block rounded-lg bg-indigo-500 p-3">
+              <Users className="h-6 w-6" />
+            </div>
+            <h4 className="mb-2 text-xl font-semibold">Get Expert Answers</h4>
+            <p className="text-slate-400">
+              A community of passionate experts is ready to help. Get clear,
+              reliable answers and vote for the most helpful ones.
+            </p>
+          </div>
+          {/* Feature 3 */}
+          <div className="rounded-xl border border-slate-800 bg-slate-800/50 p-6">
+            <div className="mb-4 inline-block rounded-lg bg-indigo-500 p-3">
+              <Star className="h-6 w-6" />
+            </div>
+            <h4 className="mb-2 text-xl font-semibold">
+              Build Your Reputation
+            </h4>
+            <p className="text-slate-400">
+              Earn points and gain credibility by providing valuable answers.
+              Become a trusted expert in your field.
+            </p>
           </div>
         </div>
-      </div>
-    </div>
-  );
-};
+      </section>
 
-export default Home;
+      {/* Footer */}
+      <footer className="mt-auto border-t border-slate-800">
+        <div className="container mx-auto px-4 py-6">
+          <p className="text-center text-sm text-slate-400">
+            © {new Date().getFullYear()} Askify. All rights reserved.
+          </p>
+        </div>
+      </footer>
+    </main>
+  );
+}
