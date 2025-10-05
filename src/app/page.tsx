@@ -1,103 +1,195 @@
-import Image from "next/image";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import RetroGrid from "@/components/magicui/retro-grid";
+import { AnimatedShinyText } from "@/components/magicui/animated-shiny-text";
+import { ArrowRight, MessageCircle, ThumbsUp, User, Eye } from "lucide-react";
+import Link from "next/link";
 
-export default function Home() {
+// Mock Data: Replace these with your actual data fetching logic from Appwrite
+const questions = [
+  {
+    id: "1",
+    title: "How to vertically center a div?",
+    tags: ["css", "html", "flexbox"],
+    author: "John Doe",
+    authorAvatar: "https://api.dicebear.com/7.x/pixel-art/svg?seed=John",
+    createdAt: "2 hours ago",
+    votes: 15,
+    answers: 3,
+    views: 120,
+  },
+  {
+    id: "2",
+    title: "What is the difference between 'let' and 'const' in JavaScript?",
+    tags: ["javascript", "es6"],
+    author: "Jane Smith",
+    authorAvatar: "https://api.dicebear.com/7.x/pixel-art/svg?seed=Jane",
+    createdAt: "1 day ago",
+    votes: 42,
+    answers: 5,
+    views: 530,
+  },
+  {
+    id: "3",
+    title: "How to fetch data in React with hooks?",
+    tags: ["react", "hooks", "fetch"],
+    author: "CodeMaster",
+    authorAvatar: "https://api.dicebear.com/7.x/pixel-art/svg?seed=Code",
+    createdAt: "3 days ago",
+    votes: 28,
+    answers: 4,
+    views: 890,
+  },
+];
+
+const popularTags = [
+  { name: "javascript", count: 1250 },
+  { name: "react", count: 980 },
+  { name: "python", count: 850 },
+  { name: "nextjs", count: 720 },
+  { name: "css", count: 650 },
+  { name: "typescript", count: 530 },
+];
+// End of Mock Data
+
+const Home = () => {
   return (
-    <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="font-mono list-inside list-decimal text-sm/6 text-center sm:text-left">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] font-mono font-semibold px-1 py-0.5 rounded">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
-
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
+    <div className="w-full">
+      {/* Hero Section */}
+      <div className="relative flex h-[400px] w-full flex-col items-center justify-center overflow-hidden rounded-lg border bg-background md:shadow-xl">
+        <RetroGrid />
+        <div className="z-10 text-center">
+          <div className="mb-4 flex items-center justify-center">
+            <AnimatedShinyText className="inline-flex items-center justify-center px-4 py-1 transition ease-out hover:text-neutral-600 hover:duration-300 hover:dark:text-neutral-400">
+              <span>✨ Askify - Your Q&A Hub</span>
+              <ArrowRight className="ml-2 h-4 w-4" />
+            </AnimatedShinyText>
+          </div>
+          <h1 className="text-4xl md:text-6xl font-bold text-foreground mb-4">
+            A Community-Driven Q&A Platform
+          </h1>
+          <p className="text-lg text-muted-foreground mb-6">
+            Ask questions, get answers, and share your knowledge with the world.
+          </p>
+          <div className="mx-auto max-w-2xl">
+            <Input
+              type="search"
+              placeholder="Search for questions..."
+              className="w-full p-6"
             />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+          </div>
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+      </div>
+
+      {/* Stats Section */}
+      <div className="my-8 grid grid-cols-1 gap-4 md:grid-cols-3">
+        <div className="flex items-center gap-4 rounded-lg border p-4">
+          <MessageCircle className="h-8 w-8 text-primary" />
+          <div>
+            <p className="text-2xl font-bold">1.2M+</p>
+            <p className="text-muted-foreground">Questions</p>
+          </div>
+        </div>
+        <div className="flex items-center gap-4 rounded-lg border p-4">
+          <ThumbsUp className="h-8 w-8 text-primary" />
+          <div>
+            <p className="text-2xl font-bold">3.4M+</p>
+            <p className="text-muted-foreground">Answers</p>
+          </div>
+        </div>
+        <div className="flex items-center gap-4 rounded-lg border p-4">
+          <User className="h-8 w-8 text-primary" />
+          <div>
+            <p className="text-2xl font-bold">800K+</p>
+            <p className="text-muted-foreground">Users</p>
+          </div>
+        </div>
+      </div>
+
+      {/* Main Content Section */}
+      <div className="flex flex-col gap-8 lg:flex-row">
+        {/* Questions List (Left Side) */}
+        <div className="w-full lg:w-3/4">
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="text-2xl font-bold">Top Questions</h2>
+            <Button asChild>
+              <Link href="/ask-question">Ask a Question</Link>
+            </Button>
+          </div>
+          <div className="space-y-4">
+            {/* IMPORTANT: Here is where you will map over your real questions
+                            fetched from your Appwrite database.
+                        */}
+            {questions.map((q) => (
+              <div key={q.id} className="rounded-lg border p-4">
+                <Link
+                  href={`/questions/${q.id}`}
+                  className="text-xl font-semibold text-primary hover:underline"
+                >
+                  {q.title}
+                </Link>
+                <div className="mt-2 flex flex-wrap gap-2">
+                  {q.tags.map((tag) => (
+                    <span
+                      key={tag}
+                      className="text-xs bg-secondary text-secondary-foreground px-2 py-1 rounded-md"
+                    >
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+                <div className="mt-4 flex items-center justify-between text-sm text-muted-foreground">
+                  <div className="flex items-center gap-2">
+                    <img
+                      src={q.authorAvatar}
+                      alt={q.author}
+                      className="h-6 w-6 rounded-full"
+                    />
+                    <span>{q.author}</span>
+                    <span>&bull; asked {q.createdAt}</span>
+                  </div>
+                  <div className="flex items-center gap-4">
+                    <span className="flex items-center gap-1">
+                      <ThumbsUp className="h-4 w-4" /> {q.votes}
+                    </span>
+                    <span className="flex items-center gap-1">
+                      <MessageCircle className="h-4 w-4" /> {q.answers}
+                    </span>
+                    <span className="flex items-center gap-1">
+                      <Eye className="h-4 w-4" /> {q.views}
+                    </span>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Sidebar (Right Side) */}
+        <div className="w-full lg:w-1/4">
+          <div className="sticky top-24">
+            <div className="rounded-lg border p-4">
+              <h3 className="text-lg font-bold mb-4">Popular Tags</h3>
+              <div className="flex flex-wrap gap-2">
+                {/* IMPORTANT: Here is where you will map over your real tags
+                                    fetched from your Appwrite database.
+                                */}
+                {popularTags.map((tag) => (
+                  <div
+                    key={tag.name}
+                    className="text-sm bg-secondary text-secondary-foreground px-3 py-1 rounded-full cursor-pointer hover:bg-primary hover:text-primary-foreground"
+                  >
+                    {tag.name}{" "}
+                    <span className="ml-1 text-xs opacity-70">{tag.count}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   );
-}
+};
+
+export default Home;
