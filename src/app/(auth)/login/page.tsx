@@ -7,6 +7,7 @@ import { cn } from "@/lib/utils";
 import { IconBrandGithub, IconBrandGoogle } from "@tabler/icons-react";
 import { useAuthStore } from "@/store/Auth";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 const BottomGradient = () => {
   return (
@@ -33,6 +34,7 @@ const LabelInputContainer = ({
 
 export default function Login() {
   const { login } = useAuthStore();
+  const router = useRouter();
   const [isLoading, setIsLoading] = React.useState(false);
   const [error, setError] = React.useState("");
 
@@ -40,23 +42,28 @@ export default function Login() {
     e.preventDefault();
 
     const formData = new FormData(e.currentTarget);
-    const email = formData.get("email");
-    const password = formData.get("password");
+    const email = formData.get("email")?.toString();
+    const password = formData.get("password")?.toString();
 
     if (!email || !password) {
-      setError(() => "Please fill out all fields");
+      setError("Please fill out all fields");
       return;
     }
 
-    setIsLoading(() => true);
-    setError(() => "");
+    setIsLoading(true);
+    setError("");
 
-    const loginResponse = await login(email.toString(), password.toString());
-    if (loginResponse.error) {
-      setError(() => loginResponse.error!.message);
+    try {
+      // Attempt to log in
+      await login(email, password);
+
+      // On SUCCESS, redirect to the questions page
+      router.push("/questions");
+    } catch (error: any) {
+      // On FAILURE, show the error message
+      setError(error.message);
+      setIsLoading(false); // Stop loading only on error
     }
-
-    setIsLoading(() => false);
   };
 
   return (
@@ -105,7 +112,7 @@ export default function Login() {
           type="submit"
           disabled={isLoading}
         >
-          Log in &rarr;
+          {isLoading ? "Logging in..." : "Log in →"}
           <BottomGradient />
         </button>
 

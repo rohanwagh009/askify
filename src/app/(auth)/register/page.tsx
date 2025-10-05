@@ -7,6 +7,7 @@ import { cn } from "@/lib/utils";
 import { IconBrandGithub, IconBrandGoogle } from "@tabler/icons-react";
 import { useAuthStore } from "@/store/Auth";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 const BottomGradient = () => {
   return (
@@ -33,6 +34,7 @@ const LabelInputContainer = ({
 
 export default function Register() {
   const { login, createAccount } = useAuthStore();
+  const router = useRouter();
   const [isLoading, setIsLoading] = React.useState(false);
   const [error, setError] = React.useState("");
 
@@ -40,35 +42,30 @@ export default function Register() {
     e.preventDefault();
 
     const formData = new FormData(e.currentTarget);
-    const firstname = formData.get("firstname");
-    const lastname = formData.get("lastname");
-    const email = formData.get("email");
-    const password = formData.get("password");
+    const firstname = formData.get("firstname")?.toString();
+    const lastname = formData.get("lastname")?.toString();
+    const email = formData.get("email")?.toString();
+    const password = formData.get("password")?.toString();
 
     if (!firstname || !lastname || !email || !password) {
-      setError(() => "Please fill out all fields");
+      setError("Please fill out all fields");
       return;
     }
 
-    setIsLoading(() => true);
-    setError(() => "");
+    setIsLoading(true);
+    setError("");
 
-    const response = await createAccount(
-      `${firstname} ${lastname}`,
-      email.toString(),
-      password.toString()
-    );
+    try {
+      // This one function creates the account AND logs the user in.
+      await createAccount(`${firstname} ${lastname}`, email, password);
 
-    if (response.error) {
-      setError(() => response.error!.message);
-    } else {
-      const loginResponse = await login(email.toString(), password.toString());
-      if (loginResponse.error) {
-        setError(() => loginResponse.error!.message);
-      }
+      // On success, redirect the user to the main app.
+      router.push("/questions");
+    } catch (error: any) {
+      // If createAccount fails, show the error.
+      setError(error.message);
+      setIsLoading(false); // Stop loading only on error
     }
-
-    setIsLoading(() => false);
   };
 
   return (
@@ -139,7 +136,7 @@ export default function Register() {
           type="submit"
           disabled={isLoading}
         >
-          Sign up &rarr;
+          {isLoading ? "Signing up..." : "Sign up →"}
           <BottomGradient />
         </button>
 

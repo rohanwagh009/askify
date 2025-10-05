@@ -1,30 +1,34 @@
-"use client"
+// src/app/(auth)/layout.tsx
+"use client";
 
-import { useAuthStore } from "@/store/Auth"
+import React, { useEffect } from "react";
+import { useAuthStore } from "@/store/Auth";
 import { useRouter } from "next/navigation";
-import React from "react"
+import Loader from "@/components/Loader";
 
-const Layout = ({children}: {children: React.ReactNode}) => {
-  const{session} = useAuthStore();
+const AuthLayout = ({ children }: { children: React.ReactNode }) => {
+  const { session, hydrated } = useAuthStore();
   const router = useRouter();
 
-  React.useEffect(() => {
-    if(session) {
-      router.push("/");
+  useEffect(() => {
+    // After the store is hydrated, if a session exists, redirect them.
+    if (hydrated && session) {
+      router.replace("/"); // Redirect to homepage
     }
-  },[session, router])
+  }, [hydrated, session, router]);
 
-  if(session) {
-    return null;
+  // 1. While the app is checking for a session OR if a session is found
+  //    (and the redirect is about to happen), show a full-page loader.
+  if (!hydrated || session) {
+    return (
+      <div className="flex h-screen w-full items-center justify-center">
+        <Loader />
+      </div>
+    );
   }
 
-  return (
-    <div className="">
-      <div className="">{children}</div>
-    </div>
-  )
+  // 2. Only if we are certain the user is a guest, show the login/register form.
+  return <>{children}</>;
+};
 
-}
-
-
-export default Layout
+export default AuthLayout;
