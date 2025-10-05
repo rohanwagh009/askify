@@ -9,14 +9,13 @@ export interface UserPrefs {
   reputation: number;
 }
 
-// 1. UPDATED THE INTERFACE: All functions now correctly return Promise<void>
 interface IAuthStore {
   session: Models.Session | null;
   user: Models.User<UserPrefs> | null;
   hydrated: boolean;
 
   setHydrated(): void;
-  verifySession(): Promise<void>; // <-- Fixed typo here
+  verifySession(): Promise<void>;
   login(email: string, password: string): Promise<void>;
   createAccount(name: string, email: string, password: string): Promise<void>;
   logout(): Promise<void>;
@@ -34,7 +33,6 @@ export const useAuthStore = create<IAuthStore>()(
       },
 
       verifySession: async () => {
-        // <-- Fixed typo here
         try {
           const session = await account.getSession("current");
           const user = await account.get<UserPrefs>();
@@ -44,9 +42,17 @@ export const useAuthStore = create<IAuthStore>()(
         }
       },
 
-      // 2. CORRECTED LOGIN FUNCTION
+      // FIXED: Delete existing session before creating new one
       login: async (email, password) => {
         try {
+          // First, check if there's an existing session and delete it
+          try {
+            await account.deleteSession("current");
+          } catch (error) {
+            // If there's no session to delete, that's fine, continue
+          }
+
+          // Now create the new session
           const sessionData = await account.createEmailPasswordSession(
             email,
             password
@@ -58,17 +64,24 @@ export const useAuthStore = create<IAuthStore>()(
         }
       },
 
-      // 3. CORRECTED AND IMPROVED SIGNUP FUNCTION
+      // FIXED: Delete existing session before creating account
       createAccount: async (name, email, password) => {
         try {
-          // 1. This function creates the user AND logs them in automatically.
+          // First, check if there's an existing session and delete it
+          try {
+            await account.deleteSession("current");
+          } catch (error) {
+            // If there's no session to delete, that's fine, continue
+          }
+
+          // Create the user account (this automatically logs them in)
           await account.create(ID.unique(), email, password, name);
 
-          // 2. Now that they're logged in, we just get the session and user data.
+          // Get the session and user data
           const sessionData = await account.getSession("current");
           const accountDetails = await account.get<UserPrefs>();
 
-          // 3. Save the new session and user to the state.
+          // Save to state
           set({ session: sessionData, user: accountDetails });
         } catch (error: any) {
           throw new Error(error.message);

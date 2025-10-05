@@ -8,6 +8,7 @@ import { IconBrandGithub, IconBrandGoogle } from "@tabler/icons-react";
 import { useAuthStore } from "@/store/Auth";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import AnimatedGridPattern from "@/components/magicui/animated-grid-pattern";
 
 const BottomGradient = () => {
   return (
@@ -33,7 +34,7 @@ const LabelInputContainer = ({
 };
 
 export default function Register() {
-  const { login, createAccount } = useAuthStore();
+  const { createAccount } = useAuthStore();
   const router = useRouter();
   const [isLoading, setIsLoading] = React.useState(false);
   const [error, setError] = React.useState("");
@@ -56,117 +57,131 @@ export default function Register() {
     setError("");
 
     try {
-      // This one function creates the account AND logs the user in.
       await createAccount(`${firstname} ${lastname}`, email, password);
-
-      // On success, redirect the user to the main app.
       router.push("/questions");
     } catch (error: any) {
-      // If createAccount fails, show the error.
       setError(error.message);
-      setIsLoading(false); // Stop loading only on error
+      setIsLoading(false);
     }
   };
 
   return (
-    <div className="mx-auto w-full max-w-md rounded-none border border-solid border-white/30 bg-white p-4 shadow-input dark:bg-black md:rounded-2xl md:p-8">
-      <h2 className="text-xl font-bold text-neutral-800 dark:text-neutral-200">
-        Welcome to Riverflow
-      </h2>
-      <p className="mt-2 max-w-sm text-sm text-neutral-600 dark:text-neutral-300">
-        Signup with riverflow if you you don&apos;t have an account.
-        <br /> If you already have an account,{" "}
-        <Link href="/login" className="text-orange-500 hover:underline">
-          login
-        </Link>{" "}
-        to riverflow
-      </p>
+    <div className="relative flex min-h-screen w-full items-center justify-center overflow-hidden bg-black px-4 py-12">
+      {/* Animated Grid Pattern Background */}
+      <AnimatedGridPattern
+        numSquares={30}
+        maxOpacity={0.1}
+        duration={3}
+        repeatDelay={1}
+        className={cn(
+          "[mask-image:radial-gradient(500px_circle_at_center,white,transparent)]",
+          "absolute inset-0 h-full w-full skew-y-12"
+        )}
+      />
 
-      {error && (
-        <p className="mt-8 text-center text-sm text-red-500 dark:text-red-400">
-          {error}
+      {/* Register Form Card */}
+      <div className="relative z-10 mx-auto w-full max-w-md rounded-none border border-solid border-white/30 bg-black/80 p-4 shadow-input backdrop-blur-sm md:rounded-2xl md:p-8">
+        <h2 className="text-xl font-bold text-neutral-800 dark:text-neutral-200">
+          Welcome to Askify
+        </h2>
+        <p className="mt-2 max-w-sm text-sm text-neutral-600 dark:text-neutral-300">
+          Signup with Askify if you don&apos;t have an account.
+          <br /> If you already have an account,{" "}
+          <Link
+            href="/login"
+            className="text-indigo-400 hover:text-indigo-300 hover:underline"
+          >
+            login
+          </Link>{" "}
+          to Askify
         </p>
-      )}
-      <form className="my-8" onSubmit={handleSubmit}>
-        <div className="mb-4 flex flex-col space-y-2 md:flex-row md:space-x-2 md:space-y-0">
-          <LabelInputContainer>
-            <Label htmlFor="firstname">First name</Label>
+
+        {error && (
+          <p className="mt-8 text-center text-sm text-red-500 dark:text-red-400">
+            {error}
+          </p>
+        )}
+        <form className="my-8" onSubmit={handleSubmit}>
+          <div className="mb-4 flex flex-col space-y-2 md:flex-row md:space-x-2 md:space-y-0">
+            <LabelInputContainer>
+              <Label htmlFor="firstname">First name</Label>
+              <Input
+                className="text-black dark:text-white"
+                id="firstname"
+                name="firstname"
+                placeholder="Tyler"
+                type="text"
+              />
+            </LabelInputContainer>
+            <LabelInputContainer>
+              <Label htmlFor="lastname">Last name</Label>
+              <Input
+                className="text-black dark:text-white"
+                id="lastname"
+                name="lastname"
+                placeholder="Durden"
+                type="text"
+              />
+            </LabelInputContainer>
+          </div>
+          <LabelInputContainer className="mb-4">
+            <Label htmlFor="email">Email Address</Label>
             <Input
-              className="text-black"
-              id="firstname"
-              name="firstname"
-              placeholder="Tyler"
-              type="text"
+              className="text-black dark:text-white"
+              id="email"
+              name="email"
+              placeholder="projectmayhem@fc.com"
+              type="email"
             />
           </LabelInputContainer>
-          <LabelInputContainer>
-            <Label htmlFor="lastname">Last name</Label>
+          <LabelInputContainer className="mb-4">
+            <Label htmlFor="password">Password</Label>
             <Input
-              className="text-black"
-              id="lastname"
-              name="lastname"
-              placeholder="Durden"
-              type="text"
+              className="text-black dark:text-white"
+              id="password"
+              name="password"
+              placeholder="••••••••"
+              type="password"
             />
           </LabelInputContainer>
-        </div>
-        <LabelInputContainer className="mb-4">
-          <Label htmlFor="email">Email Address</Label>
-          <Input
-            className="text-black"
-            id="email"
-            name="email"
-            placeholder="projectmayhem@fc.com"
-            type="email"
-          />
-        </LabelInputContainer>
-        <LabelInputContainer className="mb-4">
-          <Label htmlFor="password">Password</Label>
-          <Input
-            className="text-black"
-            id="password"
-            name="password"
-            placeholder="••••••••"
-            type="password"
-          />
-        </LabelInputContainer>
 
-        <button
-          className="group/btn relative block h-10 w-full rounded-md bg-gradient-to-br from-black to-neutral-600 font-medium text-white shadow-[0px_1px_0px_0px_#ffffff40_inset,0px_-1px_0px_0px_#ffffff40_inset] dark:bg-zinc-800 dark:from-zinc-900 dark:to-zinc-900 dark:shadow-[0px_1px_0px_0px_var(--zinc-800)_inset,0px_-1px_0px_0px_var(--zinc-800)_inset]"
-          type="submit"
-          disabled={isLoading}
-        >
-          {isLoading ? "Signing up..." : "Sign up →"}
-          <BottomGradient />
-        </button>
-
-        <div className="my-8 h-[1px] w-full bg-gradient-to-r from-transparent via-neutral-300 to-transparent dark:via-neutral-700" />
-
-        <div className="flex flex-col space-y-4">
           <button
-            className="group/btn relative flex h-10 w-full items-center justify-start space-x-2 rounded-md bg-gray-50 px-4 font-medium text-black shadow-input dark:bg-zinc-900 dark:shadow-[0px_0px_1px_1px_var(--neutral-800)]"
-            type="button"
+            className="group/btn relative block h-10 w-full rounded-md bg-gradient-to-br from-indigo-600 to-indigo-800 font-medium text-white shadow-[0px_1px_0px_0px_#ffffff40_inset,0px_-1px_0px_0px_#ffffff40_inset] dark:shadow-[0px_1px_0px_0px_var(--zinc-800)_inset,0px_-1px_0px_0px_var(--zinc-800)_inset]"
+            type="submit"
             disabled={isLoading}
           >
-            <IconBrandGoogle className="h-4 w-4 text-neutral-800 dark:text-neutral-300" />
-            <span className="text-sm text-neutral-700 dark:text-neutral-300">
-              Google
-            </span>
+            {isLoading ? "Signing up..." : "Sign up →"}
             <BottomGradient />
           </button>
-          <button
-            className="group/btn relative flex h-10 w-full items-center justify-start space-x-2 rounded-md bg-gray-50 px-4 font-medium text-black shadow-input dark:bg-zinc-900 dark:shadow-[0px_0px_1px_1px_var(--neutral-800)]"
-            type="button"
-            disabled={isLoading}
-          >
-            <IconBrandGithub className="h-4 w-4 text-neutral-800 dark:text-neutral-300" />
-            <span className="text-sm text-neutral-700 dark:text-neutral-300">
-              GitHub
-            </span>
-            <BottomGradient />
-          </button>
-        </div>
-      </form>
+
+          <div className="my-8 h-[1px] w-full bg-gradient-to-r from-transparent via-neutral-300 to-transparent dark:via-neutral-700" />
+
+          <div className="flex flex-col space-y-4">
+            <button
+              className="group/btn relative flex h-10 w-full items-center justify-start space-x-2 rounded-md bg-gray-50 px-4 font-medium text-black shadow-input dark:bg-zinc-900 dark:shadow-[0px_0px_1px_1px_var(--neutral-800)]"
+              type="button"
+              disabled={isLoading}
+            >
+              <IconBrandGoogle className="h-4 w-4 text-neutral-800 dark:text-neutral-300" />
+              <span className="text-sm text-neutral-700 dark:text-neutral-300">
+                Google
+              </span>
+              <BottomGradient />
+            </button>
+            <button
+              className="group/btn relative flex h-10 w-full items-center justify-start space-x-2 rounded-md bg-gray-50 px-4 font-medium text-black shadow-input dark:bg-zinc-900 dark:shadow-[0px_0px_1px_1px_var(--neutral-800)]"
+              type="button"
+              disabled={isLoading}
+            >
+              <IconBrandGithub className="h-4 w-4 text-neutral-800 dark:text-neutral-300" />
+              <span className="text-sm text-neutral-700 dark:text-neutral-300">
+                GitHub
+              </span>
+              <BottomGradient />
+            </button>
+          </div>
+        </form>
+      </div>
     </div>
   );
 }
