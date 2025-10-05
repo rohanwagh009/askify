@@ -8,9 +8,9 @@ import { Avatars, Client, Databases, Storage, Users } from "node-appwrite";
 let client = new Client()
 
 client
-  .setEndpoint(env.appwrite.endpoint) // Your API Endpoint
-  .setProject(env.appwrite.projectId) // Your project ID
-  .setKey(env.appwrite.apikey) // Your secret API key
+  .setEndpoint(process.env.NEXT_PUBLIC_APPWRITE_HOST_URL!) // Your API Endpoint
+  .setProject(process.env.NEXT_PUBLIC_APPWRITE_PROJECT_ID!) // Your project ID
+  .setKey(process.env.APPWRITE_API_KEY!); // Your secret API key
 
 
   
