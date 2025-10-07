@@ -73,13 +73,22 @@ export default function Home() {
               Join thousands of developers
             </div>
 
-            {/* Hero Title with Gradient */}
-            <h1 className="text-5xl font-bold tracking-tight sm:text-6xl md:text-7xl">
-              <span className="block">Ask questions,</span>
-              <span className="bg-gradient-to-r from-indigo-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
-                share knowledge
-              </span>
-            </h1>
+            {/* Askify Brand Name - Large and Beautiful */}
+            <div className="space-y-4">
+              <h1 className="text-7xl sm:text-8xl md:text-9xl font-black tracking-tight">
+                <span className="bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 bg-clip-text text-transparent">
+                  Askify
+                </span>
+              </h1>
+
+              {/* Tagline */}
+              <p className="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight text-slate-200">
+                Ask questions,{" "}
+                <span className="bg-gradient-to-r from-indigo-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
+                  share knowledge
+                </span>
+              </p>
+            </div>
 
             {/* Hero Description */}
             <p className="text-lg text-slate-400 sm:text-xl">
@@ -129,7 +138,13 @@ export default function Home() {
       <section className="relative z-10 container mx-auto px-4 py-16">
         <div className="grid grid-cols-1 gap-6 sm:grid-cols-3">
           <div className="relative overflow-hidden rounded-2xl border border-slate-800 bg-slate-900/50 p-8 backdrop-blur-sm">
-            <BorderBeam size={250} duration={12} delay={9} />
+            <BorderBeam
+              size={250}
+              duration={10}
+              delay={0}
+              colorFrom="#6366f1"
+              colorTo="#8b5cf6"
+            />
             <div className="flex flex-col items-center gap-2 text-center">
               <MessageSquare className="h-10 w-10 text-indigo-400" />
               <h3 className="text-3xl font-bold">10K+</h3>
@@ -138,7 +153,13 @@ export default function Home() {
           </div>
 
           <div className="relative overflow-hidden rounded-2xl border border-slate-800 bg-slate-900/50 p-8 backdrop-blur-sm">
-            <BorderBeam size={250} duration={12} delay={6} />
+            <BorderBeam
+              size={250}
+              duration={10}
+              delay={0}
+              colorFrom="#8b5cf6"
+              colorTo="#ec4899"
+            />
             <div className="flex flex-col items-center gap-2 text-center">
               <Users className="h-10 w-10 text-purple-400" />
               <h3 className="text-3xl font-bold">5K+</h3>
@@ -147,7 +168,13 @@ export default function Home() {
           </div>
 
           <div className="relative overflow-hidden rounded-2xl border border-slate-800 bg-slate-900/50 p-8 backdrop-blur-sm">
-            <BorderBeam size={250} duration={12} delay={3} />
+            <BorderBeam
+              size={250}
+              duration={10}
+              delay={0}
+              colorFrom="#ec4899"
+              colorTo="#f59e0b"
+            />
             <div className="flex flex-col items-center gap-2 text-center">
               <Award className="h-10 w-10 text-pink-400" />
               <h3 className="text-3xl font-bold">50K+</h3>

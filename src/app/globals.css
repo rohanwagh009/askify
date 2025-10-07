@@ -120,3 +120,17 @@
     @apply bg-background text-foreground;
   }
 }
+
+/* BorderBeam Animations */
+@keyframes border-beam-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-border-beam-spin {
+  animation: border-beam-spin var(--duration, 15s) linear infinite;
+}
