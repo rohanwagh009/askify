@@ -23,7 +23,8 @@ interface IAuthStore {
 
 export const useAuthStore = create<IAuthStore>()(
   persist(
-    immer((set) => ({
+    immer((set, get) => ({
+      // <-- Add `get` here to access state
       session: null,
       user: null,
       hydrated: false,
@@ -42,17 +43,13 @@ export const useAuthStore = create<IAuthStore>()(
         }
       },
 
-      // FIXED: Delete existing session before creating new one
       login: async (email, password) => {
         try {
-          // First, check if there's an existing session and delete it
           try {
             await account.deleteSession("current");
           } catch (error) {
-            // If there's no session to delete, that's fine, continue
+            // No session to delete, continue
           }
-
-          // Now create the new session
           const sessionData = await account.createEmailPasswordSession(
             email,
             password
@@ -64,36 +61,55 @@ export const useAuthStore = create<IAuthStore>()(
         }
       },
 
-      // FIXED: Delete existing session before creating account
       createAccount: async (name, email, password) => {
         try {
-          // First, check if there's an existing session and delete it
           try {
             await account.deleteSession("current");
           } catch (error) {
-            // If there's no session to delete, that's fine, continue
+            // No session to delete, continue
           }
-
-          // Create the user account (this automatically logs them in)
           await account.create(ID.unique(), email, password, name);
-
-          // Get the session and user data
-          const sessionData = await account.getSession("current");
+          const sessionData = await account.createEmailPasswordSession(
+            email,
+            password
+          );
           const accountDetails = await account.get<UserPrefs>();
-
-          // Save to state
           set({ session: sessionData, user: accountDetails });
         } catch (error: any) {
           throw new Error(error.message);
         }
       },
 
+      // --- FIXED LOGOUT FUNCTION ---
       logout: async () => {
-        try {
-          await account.deleteSession("current");
+        // 1. First line of defense: Don't make an API call if we know we're logged out.
+        if (!get().session) {
+          console.log("No local session found. State is already clean.");
           set({ session: null, user: null });
+          return;
+        }
+
+        try {
+          // 2. Attempt to delete the session on the server.
+          await account.deleteSession("current");
         } catch (error: any) {
-          throw new Error(error.message);
+          // 3. Second line of defense: Smartly handle API errors.
+          // Check if it's the specific error for an already-logged-out user.
+          // Appwrite often uses code 401 for this.
+          if (error.code === 401 || error.message.includes("missing scopes")) {
+            // This is an expected situation, not a bug.
+            // Silently proceed without logging an error.
+            console.log(
+              "Session was already expired on the server. State cleaned up."
+            );
+          } else {
+            // This is a different, unexpected error (like a network failure),
+            // so we should log it.
+            console.error("An unexpected error occurred during logout:", error);
+          }
+        } finally {
+          // 4. In ALL cases, whether success or failure, ensure the final state is clean.
+          set({ session: null, user: null });
         }
       },
     })),
